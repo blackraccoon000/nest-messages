@@ -1,0 +1,16 @@
+# Use VSCode Rest Client
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+### List All Messages
+GET http://localhost:3000/messages
+
+### Create a Message
+POST http://localhost:3000/messages
+content-type: application/json
+
+{
+    "content": "hi,there! I`m REST Client"
+}
+
+### Get a particular message
+GET http://localhost:3000/messages/xxxx

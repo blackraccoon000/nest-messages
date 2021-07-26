@@ -163,3 +163,76 @@ createMessage()
 @Get("/messages/:id")
 getMessage()
 }
+
+## API Clients
+
+VSCode Rest Client Extension
+
+https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+参考
+https://qiita.com/kawasukeeee/items/7bc5d948e3029c8a3a23
+
+超便利。
+
+## HTTP Request
+
+Start Line -> POST /messages/5?validate=true HTTP/1.1
+`5 -> @Param("id")`
+`validate=true -> @Query()`
+
+Headers -> {
+Host:localhost:3000
+Content-Type:application/json
+}
+`@Headers()`
+
+Body -> {
+"content":"hi there!"
+}
+`@Body()`
+
+### 実践
+
+```ts
+import { Controller, Get, Post, Body, Param } from '@nestjs/common'
+
+@Controller('messages') // ここで既に"/messages"ディレクトリが指定されている
+export class MessagesController {
+  @Get()
+  listMessages() {}
+  @Post()
+  createMessage(@Body() body: any) {
+    console.log(body)
+  }
+  @Get('/:id')
+  getMessage(@Param('id') id: string) {
+    console.log(id)
+  }
+}
+```
+
+#### rest
+
+```http
+POST http://localhost:3000/messages
+content-type: application/json
+
+{
+    "content": "hi,there! I`m REST Client"
+}
+```
+
+#### console.log
+
+{ content: 'hi,there! I`m REST Client' }
+
+#### rest
+
+```http
+GET http://localhost:3000/messages/xxxx
+```
+
+#### console.log
+
+xxxx
