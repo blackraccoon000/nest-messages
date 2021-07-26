@@ -78,3 +78,88 @@ localhost:3000 でアクセス可能 Hello World が出る。
 ```
 
 ## はじめから作成してみる。
+
+src ディレクトリの main.ts 以外のファイルを削除
+
+`❯ nest generate module messages`
+
+```
+❯ nest generate module messages
+CREATE src/messages/messages.module.ts (85 bytes)
+```
+
+```js
+// messages.module.ts
+import { Module } from '@nestjs/common'
+
+@Module({})
+export class MessagesModule {}
+```
+
+```js
+// main.ts
+import { NestFactory } from '@nestjs/core'
+import { MessagesModule } from './messages/messages.module'
+
+async function bootstrap() {
+  const app = await NestFactory.create(MessagesModule)
+  await app.listen(3000)
+}
+bootstrap()
+```
+
+### Controller の作成
+
+`❯ nest generate controller messages/messages --flat`
+
+```
+❯ nest generate controller messages/messages --flat
+CREATE src/messages/messages.controller.spec.ts (506 bytes)
+CREATE src/messages/messages.controller.ts (105 bytes)
+UPDATE src/messages/messages.module.ts (181 bytes)
+```
+
+```js
+// messages.module.ts
+import { Module } from '@nestjs/common'
+import { MessagesController } from './messages.controller'
+
+@Module({
+  controllers: [MessagesController],
+})
+export class MessagesModule {}
+```
+
+Controller が自動で追加されている。
+
+## コマンド分解
+
+| nest generate |        controller         |                         messages/messages                         |                      --flat                       |
+| :-----------: | :-----------------------: | :---------------------------------------------------------------: | :-----------------------------------------------: |
+|               | Type of class to generate | Place the file in the messages folder / Call the class "messages" | Don`t create an extra folder called "controllers" |
+
+--flat をつけると余分なフォルダを作成しない。
+細かく分けたい場合には--flat は外す。好み。
+
+# Route
+
+GET localhost:3000/messages/:id -> Controller(リクエストを特定の機能にルーティングします。) -> Service(Business Logic) -> Repository(Access Database)
+
+### .e.g
+
+request
+GET /messages -> List All messages
+POST /messages -> Create a message
+GET /messages/:id -> Get a particular message
+
+Option #1
+
+@Controller()
+export class MessagesController {
+@Get("/messages")
+listMessages()
+@Post("/messages")
+createMessage()
+@Get("/messages/:id")
+getMessage()
+}
